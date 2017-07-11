@@ -8,8 +8,6 @@ endif
 
 default: compile
 
-test: ct
-
 compile:
 	rebar3 compile
 
