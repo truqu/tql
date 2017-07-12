@@ -4,6 +4,7 @@
 
 -export([ compose/1
         , compose/2
+        , sequence/2
         ]).
 
 %%%---------------------------------------------------------------------
@@ -15,6 +16,18 @@ compose(Fs) when is_list(Fs) ->
 
 compose(F, G) ->
   fun (X) -> F(G(X)) end.
+
+sequence(Fs, X) ->
+  sequence(Fs, X, []).
+
+%%%---------------------------------------------------------------------
+%%% Internal functions
+%%%---------------------------------------------------------------------
+
+sequence([], _, Ys) ->
+  lists:reverse(Ys);
+sequence([F | Fs], X, Ys) ->
+  sequence(Fs, X, [F(X) | Ys]).
 
 %% Local variables:
 %% mode: erlang

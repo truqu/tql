@@ -6,11 +6,13 @@
 -export([ all/0
           %% Tests
         , compose/1
+        , sequence/1
         ]
        ).
 
 all() ->
   [ compose
+  , sequence
   ].
 
 %%%---------------------------------------------------------------------
@@ -23,6 +25,14 @@ compose(_Config) ->
   42 = (tql_fun:compose(F, G))(20),
   H = fun (X) -> X + 2 end,
   44 = (tql_fun:compose([H, F, G]))(20),
+  ok.
+
+sequence(_Config) ->
+  Fs = [ fun (X) -> X + 1 end
+       , fun (X) -> X + 2 end
+       , fun (X) -> X + 3 end
+       ],
+  [1,2,3] = tql_fun:sequence(Fs, 0),
   ok.
 
 %% Local variables:
