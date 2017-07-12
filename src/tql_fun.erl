@@ -11,10 +11,10 @@
 %%%---------------------------------------------------------------------
 
 compose(Fs) when is_list(Fs) ->
-    lists:foldr(fun compose/2, fun tql:id/1, Fs).
+  lists:foldr(fun compose/2, fun tql:id/1, Fs).
 
 compose(F, G) ->
-    fun (X) -> F(G(X)) end.
+  fun (X) -> F(G(X)) end.
 
 %% Local variables:
 %% mode: erlang
