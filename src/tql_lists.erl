@@ -8,7 +8,7 @@
         , shuffle/1
         , some/1
         , take/2
-        , unique/1
+        , uniq/1
         , zip4/4
         , zip5/5
         ]).
@@ -52,7 +52,7 @@ take(N, [X | Xs]) ->
   [X | take(N-1, Xs)].
 
 %% TODO: -spec
-unique(L) ->
+uniq(L) ->
   sets:to_list(sets:from_list(L)).
 
 %% TODO: -spec
