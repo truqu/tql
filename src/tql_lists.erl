@@ -51,7 +51,7 @@ take(_, []) ->
 take(N, [X | Xs]) ->
   [X | take(N-1, Xs)].
 
-%% TODO: -spec
+-spec uniq([A]) -> [A].
 uniq(L) ->
   sets:to_list(sets:from_list(L)).
 
