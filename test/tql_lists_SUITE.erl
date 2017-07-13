@@ -7,12 +7,14 @@
           %% Tests
         , all_/1
         , some/1
+        , uniq/1
         ]
        ).
 
 all() ->
   [ all_
   , some
+  , uniq
   ].
 
 %%%---------------------------------------------------------------------
@@ -37,6 +39,23 @@ some(_Config) ->
                   , ?IMPLIES(lists:member(true, L)
                             , tql_lists:some(L)
                             )
+                  )
+          ),
+  ok.
+
+uniq(_Config) ->
+  true = proper:quickcheck(
+          ?FORALL( L
+                 , list(term())
+                 , length(tql_lists:uniq(L)) == sets:size(sets:from_list(L))
+                 )
+          ),
+  true = proper:quickcheck(
+           ?FORALL( L
+                  , list(term())
+                  , tql_lists:all(
+                      [lists:member(X, tql_lists:uniq(L)) || X <- L]
+                     )
                   )
           ),
   ok.
