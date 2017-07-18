@@ -4,6 +4,7 @@
 
 -export([ compose/1
         , compose/2
+        , negate/1
         , sequence/2
         ]).
 
@@ -16,6 +17,10 @@ compose(Fs) when is_list(Fs) ->
 
 compose(F, G) ->
   fun (X) -> F(G(X)) end.
+
+-spec negate(fun ((A) -> boolean())) -> fun ((A) -> boolean()).
+negate(F) ->
+  fun (X) -> not F(X) end.
 
 sequence(Fs, X) ->
   sequence(Fs, X, []).
