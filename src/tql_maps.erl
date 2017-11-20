@@ -4,6 +4,7 @@
 
 -export([ mergeWith/3
         , mergeWith3/4
+        , update_key/3
         ]).
 
 %%%---------------------------------------------------------------------
@@ -27,6 +28,11 @@ mergeWith(Combine, M1, M2) ->
               -> #{K => V}.
 mergeWith3(Combine, M1, M2, M3) ->
   mergeWith(Combine, mergeWith(Combine, M1, M2), M3).
+
+update_key(Old, New, M) ->
+  V = maps:get(Old, M),
+  M2 = maps:remove(Old, M),
+  M2#{New => V}.
 
 %% Local variables:
 %% mode: erlang
