@@ -4,6 +4,8 @@
 
 -export([ compose/1
         , compose/2
+        , conjunction/1
+        , disjunction/1
         , negate/1
         , sequence/2
         ]).
@@ -17,6 +19,14 @@ compose(Fs) when is_list(Fs) ->
 
 compose(F, G) ->
   fun (X) -> F(G(X)) end.
+
+-spec conjunction([fun ((A) -> boolean())]) -> fun ((A) -> boolean()).
+conjunction(Fs) ->
+  fun (X) -> tql_lists:all(sequence(Fs, X)) end.
+
+-spec disjunction([fun ((A) -> boolean())]) -> fun ((A) -> boolean()).
+disjunction(Fs) ->
+  fun (X) -> tql_lists:any(sequence(Fs, X)) end.
 
 -spec negate(fun ((A) -> boolean())) -> fun ((A) -> boolean()).
 negate(F) ->
