@@ -4,6 +4,7 @@
 -export([ binary_join/2
         , id/1
         , to_hex/1
+        , pipe/2
         ]).
 
 %%%---------------------------------------------------------------------
@@ -34,6 +35,9 @@ to_hex(Bin) when is_binary(Bin) ->
   list_to_binary(
     lists:flatten(
       [io_lib:format("~2.16.0b", [B]) || <<B>> <= Bin])).
+
+pipe(Arg, Fs) ->
+  (tql_fun:compose(Fs))(Arg).
 
 %% Local variables:
 %% mode: erlang
