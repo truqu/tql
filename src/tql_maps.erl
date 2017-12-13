@@ -2,7 +2,8 @@
 
 %% API
 
--export([ mergeWith/3
+-export([ map_values/2
+        , mergeWith/3
         , mergeWith3/4
         , update_key/3
         ]).
@@ -10,6 +11,10 @@
 %%%---------------------------------------------------------------------
 %%% API
 %%%---------------------------------------------------------------------
+
+-spec map_values(fun((V) -> V), #{K => V}) -> #{K => V}.
+map_values(F, M) ->
+  maps:map(fun (_, V) -> F(V) end, M).
 
 -spec mergeWith(fun((V, V) -> V), #{K => V}, #{K => V}) -> #{K => V}.
 mergeWith(Combine, M1, M2) ->
