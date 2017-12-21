@@ -37,7 +37,7 @@ to_hex(Bin) when is_binary(Bin) ->
       [io_lib:format("~2.16.0b", [B]) || <<B>> <= Bin])).
 
 pipe(Arg, Fs) ->
-  (tql_fun:compose(Fs))(Arg).
+  (tql_fun:compose(lists:reverse(Fs)))(Arg).
 
 %% Local variables:
 %% mode: erlang

@@ -6,11 +6,13 @@
 -export([ all/0
           %% Tests
         , id/1
+        , pipe/1
         ]
        ).
 
 all() ->
   [ id
+  , pipe
   ].
 
 %%%---------------------------------------------------------------------
@@ -22,6 +24,9 @@ id(_Config) ->
            proper:forall(term(), fun (X) -> tql:id(X) =:= X end)
           ),
   ok.
+
+pipe(_Config) ->
+  3 = tql:pipe(1, [fun (X) -> X * 2 end, fun (X) -> X +1 end]).
 
 %% Local variables:
 %% mode: erlang
