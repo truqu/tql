@@ -7,6 +7,7 @@
           %% Tests
         , compose/1
         , conjunction/1
+        , disjunction/1
         , negate/1
         , sequence/1
         ]
@@ -15,6 +16,7 @@
 all() ->
   [ compose
   , conjunction
+  , disjunction
   , negate
   , sequence
   ].
@@ -35,6 +37,13 @@ conjunction(_Config) ->
   F = tql_fun:conjunction([fun (X) -> X > 1 end, fun (X) -> X < 3 end]),
   false = F(1),
   true = F(2),
+  ok.
+
+disjunction(_Config) ->
+  F = tql_fun:disjunction([fun (X) -> X < 1 end, fun (X) -> X > 3 end]),
+  true = F(0),
+  false = F(2),
+  true = F(4),
   ok.
 
 negate(_Config) ->
