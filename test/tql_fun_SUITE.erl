@@ -6,7 +6,7 @@
 -export([ all/0
           %% Tests
         , compose/1
-        , conjunction/1
+        , all_/1
         , disjunction/1
         , negate/1
         , sequence/1
@@ -15,7 +15,7 @@
 
 all() ->
   [ compose
-  , conjunction
+  , all_
   , disjunction
   , negate
   , sequence
@@ -33,8 +33,8 @@ compose(_Config) ->
   44 = (tql_fun:compose([H, F, G]))(20),
   ok.
 
-conjunction(_Config) ->
-  F = tql_fun:conjunction([fun (X) -> X > 1 end, fun (X) -> X < 3 end]),
+all_(_Config) ->
+  F = tql_fun:all([fun (X) -> X > 1 end, fun (X) -> X < 3 end]),
   false = F(1),
   true = F(2),
   ok.
