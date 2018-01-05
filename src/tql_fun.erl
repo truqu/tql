@@ -5,7 +5,7 @@
 -export([ compose/1
         , compose/2
         , all/1
-        , disjunction/1
+        , any/1
         , negate/1
         , sequence/2
         ]).
@@ -24,8 +24,8 @@ compose(F, G) ->
 all(Fs) ->
   fun (X) -> tql_lists:all(sequence(Fs, X)) end.
 
--spec disjunction([fun ((A) -> boolean())]) -> fun ((A) -> boolean()).
-disjunction(Fs) ->
+-spec any([fun ((A) -> boolean())]) -> fun ((A) -> boolean()).
+any(Fs) ->
   fun (X) -> tql_lists:any(sequence(Fs, X)) end.
 
 -spec negate(fun ((A) -> boolean())) -> fun ((A) -> boolean()).
