@@ -1,11 +1,12 @@
 -module(tql_fun_SUITE).
 
 -include_lib("common_test/include/ct.hrl").
--include_lib("proper/include/proper.hrl").
+%% -include_lib("proper/include/proper.hrl").
 
 -export([ all/0
           %% Tests
         , compose/1
+        , conjunction/1
         , negate/1
         , sequence/1
         ]
@@ -13,6 +14,7 @@
 
 all() ->
   [ compose
+  , conjunction
   , negate
   , sequence
   ].
@@ -27,6 +29,12 @@ compose(_Config) ->
   42 = (tql_fun:compose(F, G))(20),
   H = fun (X) -> X + 2 end,
   44 = (tql_fun:compose([H, F, G]))(20),
+  ok.
+
+conjunction(_Config) ->
+  F = tql_fun:conjunction([fun (X) -> X > 1 end, fun (X) -> X < 3 end]),
+  false = F(1),
+  true = F(2),
   ok.
 
 negate(_Config) ->
