@@ -1,7 +1,9 @@
 #!/bin/bash
 
-if [ ! -e $HOME/erlang/19.3 ]; then
+KERL_VERSION=20.2
+
+if [ ! -e $HOME/erlang/$KERL_VERSION ]; then
     kerl update releases
-    kerl build 19.3 19.3
-    kerl install 19.3 ~/erlang/19.3
+    kerl build $KERL_VERSION $KERL_VERSION
+    kerl install $KERL_VERSION ~/erlang/$KERL_VERSION
 fi

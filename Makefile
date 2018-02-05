@@ -1,4 +1,4 @@
-KERL_VERSION = 19.3
+KERL_VERSION = 20.2
 
 ifdef KERL_VERSION
   SHELL := /bin/bash
@@ -36,3 +36,6 @@ ct-cover:
 
 dialyzer:
 	rebar3 dialyzer
+
+.PHONY: test
+test: ct dialyzer
