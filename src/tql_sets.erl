@@ -39,7 +39,7 @@ map(Fun, Set) ->
 
 -spec symmetric_difference(sets:set(), sets:set()) -> sets:set().
 symmetric_difference(Set1, Set2) ->
-  sets:union(sets:subtract(Set1,Set2),sets:subtract(Set2,Set1)).
+  sets:union(sets:subtract(Set1, Set2), sets:subtract(Set2, Set1)).
 
 %% Local variables:
 %% mode: erlang
