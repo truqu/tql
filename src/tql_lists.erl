@@ -3,12 +3,13 @@
 %% API
 
 -export([ all/1
+        , any/1
         , droplast_n/2
         , intersperse/2
         , shuffle/1
         , some/1
         , take/2
-        , unique/1
+        , uniq/1
         , zip4/4
         , zip5/5
         ]).
@@ -19,7 +20,11 @@
 
 -spec all([boolean()]) -> boolean().
 all(Xs) ->
-  lists:all(fun (X) -> X == true end, Xs).
+  lists:all(fun tql:id/1, Xs).
+
+-spec any([boolean()]) -> boolean().
+any(Xs) ->
+  lists:any(fun tql:id/1, Xs).
 
 %% TODO: -spec
 droplast_n(L = [], _) ->
@@ -51,11 +56,11 @@ take(_, []) ->
 take(N, [X | Xs]) ->
   [X | take(N-1, Xs)].
 
-%% TODO: -spec
-unique(L) ->
+-spec uniq([A]) -> [A].
+uniq(L) ->
   sets:to_list(sets:from_list(L)).
 
-%% TODO: -spec
+
 zip4([X | Xs], [Y | Ys], [Z | Zs], [V | Vs]) ->
   [{X, Y, Z, V} | zip4(Xs, Ys, Zs, Vs)];
 zip4([], [], [], []) ->

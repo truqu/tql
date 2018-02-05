@@ -2,13 +2,19 @@
 
 %% API
 
--export([ mergeWith/3
+-export([ map_values/2
+        , mergeWith/3
         , mergeWith3/4
+        , update_key/3
         ]).
 
 %%%---------------------------------------------------------------------
 %%% API
 %%%---------------------------------------------------------------------
+
+-spec map_values(fun((V) -> V), #{K => V}) -> #{K => V}.
+map_values(F, M) ->
+  maps:map(fun (_, V) -> F(V) end, M).
 
 -spec mergeWith(fun((V, V) -> V), #{K => V}, #{K => V}) -> #{K => V}.
 mergeWith(Combine, M1, M2) ->
@@ -27,6 +33,11 @@ mergeWith(Combine, M1, M2) ->
               -> #{K => V}.
 mergeWith3(Combine, M1, M2, M3) ->
   mergeWith(Combine, mergeWith(Combine, M1, M2), M3).
+
+update_key(Old, New, M) ->
+  V = maps:get(Old, M),
+  M2 = maps:remove(Old, M),
+  M2#{New => V}.
 
 %% Local variables:
 %% mode: erlang

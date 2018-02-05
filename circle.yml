@@ -10,3 +10,6 @@ dependencies:
     - ~/.kerl
     - ~/bin
     - ~/erlang
+test:
+  override:
+    - make ct
