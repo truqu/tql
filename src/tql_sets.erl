@@ -7,6 +7,7 @@
         , intersect/2
         , is_empty/1
         , map/2
+        , symmetric_difference/2
         ]).
 
 %%%---------------------------------------------------------------------
@@ -35,6 +36,10 @@ map(Fun, Set) ->
            , sets:new()
            , Set
            ).
+
+-spec symmetric_difference(sets:set(), sets:set()) -> sets:set().
+symmetric_difference(Set1, Set2) ->
+  sets:union(sets:subtract(Set1,Set2),sets:subtract(Set2,Set1)).
 
 %% Local variables:
 %% mode: erlang
