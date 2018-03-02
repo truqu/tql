@@ -5,8 +5,6 @@
         , id/1
         , to_hex/1
         , pipe/2
-        , either/1
-        , either/2
         ]).
 
 %%%---------------------------------------------------------------------
@@ -40,49 +38,6 @@ to_hex(Bin) when is_binary(Bin) ->
 
 pipe(Arg, Fs) ->
   (tql_fun:compose(lists:reverse(Fs)))(Arg).
-
--spec either([fun((Term) -> Return)])
-            -> {ok, Term} | {error, Error}
-                 when Term   :: term()
-                    , Error  :: term()
-                    , Return :: Term | {ok, Term} | {error, Error}.
-either([Head | Tail]) ->
-  either(Head(), Tail).
-
--spec either(term(), [fun((Term) -> Return)])
-            -> {ok, Term} | {error, Error}
-                 when Term   :: term()
-                    , Error  :: term()
-                    , Return :: Term | {ok, Term} | {error, Error}.
-either(Init, Fs) when is_list(Fs) ->
-  Result = lists:foldl(fun either_fold/2, Init, Fs),
-  either_create(Result).
-
-%%%-----------------------------------------------------------------------------
-%%% Internal functions
-%%%-----------------------------------------------------------------------------
-
--spec either_fold(fun((Term) -> Return), Return)
-                 -> {ok, Return} | Return | {error, Error}
-                      when Term   :: term()
-                         , Error  :: term()
-                         , Return :: Term | {ok, Term} | {error, Error}.
-either_fold(F, {ok, Value}) ->
-  F(Value);
-either_fold(_, {error, Reason}) ->
-  {error, Reason};
-either_fold(F, Value) ->
-  F(Value).
-
--spec either_create({error, term()} | {ok, term()} | term()) ->
-  {error, term()} | {ok, term()}.
-either_create({error, Reason}) ->
-  {error, Reason};
-either_create({ok, Value}) ->
-  {ok, Value};
-either_create(Value) ->
-  {ok, Value}.
-
 
 %% Local variables:
 %% mode: erlang
