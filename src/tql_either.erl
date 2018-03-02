@@ -3,6 +3,7 @@
 %% API exports
 -export([ fold/1
         , fold/2
+        , sequence/1
         ]).
 
 %%%---------------------------------------------------------------------
@@ -25,6 +26,18 @@ fold([Head | Tail]) ->
 fold(Init, Fs) when is_list(Fs) ->
   Result = lists:foldl(fun fold_handle/2, Init, Fs),
   fold_create(Result).
+
+-spec sequence([{error, term()} | {ok, term()}])
+              -> {error, term()} | {ok, [term()]}.
+sequence(Eithers) ->
+  lists:foldr(fun
+    ({ok, Success}, {ok, Successes}) ->
+      {ok, [Success | Successes]};
+    ({ok, _Success}, {error, Failure}) ->
+      {error, Failure};
+    ({error, Failure}, _) ->
+      {error, Failure}
+  end, {ok, []}, Eithers).
 
 %%%-----------------------------------------------------------------------------
 %%% Internal functions

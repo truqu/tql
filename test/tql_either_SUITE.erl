@@ -5,25 +5,30 @@
 
 -export([ all/0
           %% Tests
-        , test_either1/1
-        , test_either2/1
-        , test_either3/1
-        , test_either4/1
-        ]
-       ).
+        , test_fold1/1
+        , test_fold2/1
+        , test_fold3/1
+        , test_fold4/1
+        , test_sequence1/1
+        , test_sequence2/1
+        , test_sequence3/1
+        ]).
 
 all() ->
-  [ test_either1
-  , test_either2
-  , test_either3
-  , test_either4
+  [ test_fold1
+  , test_fold2
+  , test_fold3
+  , test_fold4
+  , test_sequence1
+  , test_sequence2
+  , test_sequence3
   ].
 
 %%%---------------------------------------------------------------------
 %%% Tests
 %%%---------------------------------------------------------------------
 
-test_either1(_Config) ->
+test_fold1(_Config) ->
   Result = tql_either:fold([ fun initiate_map/0
                            , fun(X) -> add_foo(X, 1) end
                            , fun increment_foo/1
@@ -31,7 +36,7 @@ test_either1(_Config) ->
                            ]),
   {ok, [{foo, 2}]} = Result.
 
-test_either2(_Config) ->
+test_fold2(_Config) ->
   Result = tql_either:fold( #{}
                           , [ fun(X) -> add_foo(X, 1) end
                             , fun increment_foo/1
@@ -40,7 +45,7 @@ test_either2(_Config) ->
   {ok, [{foo, 2}]} = Result.
 
 
-test_either3(_Config) ->
+test_fold3(_Config) ->
   Result = tql_either:fold( #{foo => 2}
                           , [ fun(X) -> add_foo(X, 1) end
                             , fun increment_foo/1
@@ -48,13 +53,37 @@ test_either3(_Config) ->
                             ]),
   {error, foo_already_set} = Result.
 
-test_either4(_Config) ->
+test_fold4(_Config) ->
   Result = tql_either:fold( #{}
                           , [ fun(X) -> add_foo(X, "BAR") end
                             , fun increment_foo/1
                             , fun maps:to_list/1
                             ]),
   {error, foo_not_integer} = Result.
+
+
+test_sequence1(_Config) ->
+  Result = tql_either:sequence([ {ok, true}
+                              , {ok, 1}
+                              , {ok, "foobar"}
+                              ]),
+  {ok, [true, 1, "foobar"]} = Result.
+
+test_sequence2(_Config) ->
+  Result = tql_either:sequence([ {ok, true}
+                               , {error, not_found}
+                               , {ok, "foobar"}
+                               ]),
+  {error, not_found} = Result.
+
+
+test_sequence3(_Config) ->
+  Result = tql_either:sequence([ {ok, true}
+                               , {error, not_found}
+                               , {error, ignored}
+                               ]),
+  {error, not_found} = Result.
+
 
 %%%-----------------------------------------------------------------------------
 %%% Internal functions
