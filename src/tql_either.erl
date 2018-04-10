@@ -4,6 +4,8 @@
 -export([ fold/1
         , fold/2
         , sequence/1
+        , is_ok/1
+        , is_error/1
         ]).
 
 %%%---------------------------------------------------------------------
@@ -11,18 +13,18 @@
 %%%---------------------------------------------------------------------
 
 -spec fold([fun((Term) -> Return)])
-            -> {ok, Term} | {error, Error}
-                 when Term   :: term()
-                    , Error  :: term()
-                    , Return :: Term | {ok, Term} | {error, Error}.
+          -> {ok, Term} | {error, Error}
+               when Term   :: term()
+                  , Error  :: term()
+                  , Return :: Term | {ok, Term} | {error, Error}.
 fold([Head | Tail]) ->
   fold(Head(), Tail).
 
 -spec fold(term(), [fun((Term) -> Return)])
-            -> {ok, Term} | {error, Error}
-                 when Term   :: term()
-                    , Error  :: term()
-                    , Return :: Term | {ok, Term} | {error, Error}.
+          -> {ok, Term} | {error, Error}
+               when Term   :: term()
+                  , Error  :: term()
+                  , Return :: Term | {ok, Term} | {error, Error}.
 fold(Init, Fs) when is_list(Fs) ->
   Result = lists:foldl(fun fold_handle/2, Init, Fs),
   fold_create(Result).
@@ -38,6 +40,18 @@ sequence(Eithers) ->
     ({error, Failure}, _) ->
       {error, Failure}
   end, {ok, []}, Eithers).
+
+-spec is_ok({ok, term()} | {error, term()}) -> boolean().
+is_ok({ok, _}) ->
+  true;
+is_ok({error, _}) ->
+  false.
+
+-spec is_error({ok, term()} | {error, term()}) -> boolean().
+is_error({ok, _}) ->
+  false;
+is_error({error, _}) ->
+  true.
 
 %%%-----------------------------------------------------------------------------
 %%% Internal functions
