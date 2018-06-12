@@ -12,7 +12,14 @@
 %%% API
 %%%---------------------------------------------------------------------
 
--spec fold([fun((Term) -> Return)])
+%% @doc Fold functions into a value.
+%%
+%% The first function is expected to be a nullary function, producing
+%% either an `{ok, V}', `{error, E}' or a plain term value. If the
+%% result is an `{ok, V}' or plain term, the resulting value is fed to
+%% the next function, and so on. As soon as an `{error, E}' tuple is
+%% encountered, the resulting error tuple is returned.
+-spec fold([fun((Term) -> Return), ...])
           -> {ok, Term} | {error, Error}
                when Term   :: term()
                   , Error  :: term()
@@ -20,6 +27,11 @@
 fold([Head | Tail]) ->
   fold(Head(), Tail).
 
+%% @doc Fold over a term with a list of functions.
+%%
+%% Much like `tql_either:fold/1' except the first function is called
+%% with the given value. If the given list of functions is empty,
+%% returns `{ok, V}' where `V' is the given value.
 -spec fold(term(), [fun((Term) -> Return)])
           -> {ok, Term} | {error, Error}
                when Term   :: term()
@@ -29,6 +41,11 @@ fold(Init, Fs) when is_list(Fs) ->
   Result = lists:foldl(fun fold_handle/2, Init, Fs),
   fold_create(Result).
 
+%% @doc Combine a list of result tuples.
+%%
+%% This will result in either an `{error, E}' if any of the supplied
+%% tuples is an error, or `{ok, [V]}' with all the ok-values sequenced
+%% into a list.
 -spec sequence([{error, term()} | {ok, term()}])
               -> {error, term()} | {ok, [term()]}.
 sequence(Eithers) ->
@@ -41,12 +58,14 @@ sequence(Eithers) ->
       {error, Failure}
   end, {ok, []}, Eithers).
 
+%% @doc Check whether the given result tuple is of the form `{ok, V}'.
 -spec is_ok({ok, term()} | {error, term()}) -> boolean().
 is_ok({ok, _}) ->
   true;
 is_ok({error, _}) ->
   false.
 
+%% @doc Check whether the given result tuple is of the form `{error, E}'.
 -spec is_error({ok, term()} | {error, term()}) -> boolean().
 is_error({ok, _}) ->
   false;
