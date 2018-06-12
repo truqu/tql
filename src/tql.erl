@@ -26,8 +26,8 @@ id(X) ->
 %% ```
 %%    Funs = [fun string:titlecase/1, fun string:reverse/1],
 %%    Res = tql:pipe("this is an example", Funs),
-%%    Res = "elpmaxE nA sI sihT".
-%% '''
+%%    Res = "elpmaxe na si sihT".
+
 -spec pipe(Arg, Funs) -> Res when
     Arg :: term(),
     Funs :: [Fun],
