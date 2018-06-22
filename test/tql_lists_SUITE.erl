@@ -6,13 +6,15 @@
 -export([ all/0
           %% Tests
         , all_/1
-        , some/1
+        , any/1
+        , uniq/1
         ]
        ).
 
 all() ->
   [ all_
-  , some
+  , any
+  , uniq
   ].
 
 %%%---------------------------------------------------------------------
@@ -30,13 +32,30 @@ all_(_Config) ->
           ),
   ok.
 
-some(_Config) ->
+any(_Config) ->
   true = proper:quickcheck(
            ?FORALL( L
                   , list(boolean())
                   , ?IMPLIES(lists:member(true, L)
-                            , tql_lists:some(L)
+                            , tql_lists:any(L)
                             )
+                  )
+          ),
+  ok.
+
+uniq(_Config) ->
+  true = proper:quickcheck(
+          ?FORALL( L
+                 , list(term())
+                 , length(tql_lists:uniq(L)) == sets:size(sets:from_list(L))
+                 )
+          ),
+  true = proper:quickcheck(
+           ?FORALL( L
+                  , list(term())
+                  , tql_lists:all(
+                      [lists:member(X, tql_lists:uniq(L)) || X <- L]
+                     )
                   )
           ),
   ok.

@@ -1,32 +1,26 @@
--module(tql_SUITE).
+-module(tql_bin_SUITE).
 
 -include_lib("common_test/include/ct.hrl").
 -include_lib("proper/include/proper.hrl").
 
 -export([ all/0
           %% Tests
-        , id/1
-        , pipe/1
+        , to_hex/1
         ]
        ).
 
 all() ->
-  [ id
-  , pipe
+  [ to_hex
   ].
 
 %%%---------------------------------------------------------------------
 %%% Tests
 %%%---------------------------------------------------------------------
 
-id(_Config) ->
-  true = proper:quickcheck(
-           proper:forall(term(), fun (X) -> tql:id(X) =:= X end)
-          ),
+to_hex(_Config) ->
+  <<"beef">> = tql_bin:to_hex(<<190, 239>>),
+  <<"c0ffee">> = tql_bin:to_hex(<<192, 255, 238>>),
   ok.
-
-pipe(_Config) ->
-  3 = tql:pipe(1, [fun (X) -> X * 2 end, fun (X) -> X +1 end]).
 
 %% Local variables:
 %% mode: erlang
