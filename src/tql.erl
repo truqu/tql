@@ -1,9 +1,7 @@
 -module(tql).
 
 %% API exports
--export([ binary_join/2
-        , id/1
-        , to_hex/1
+-export([ id/1
         , pipe/2
         ]).
 
@@ -11,31 +9,30 @@
 %%% API
 %%%---------------------------------------------------------------------
 
-binary_join([], _Sep) ->
-  <<>>;
-binary_join([Part], _Sep) ->
-  Part;
-binary_join(List, Sep) ->
-  lists:foldr(
-    fun (A, B) ->
-        case bit_size(B) > 0 of
-          true  -> <<A/binary, Sep/binary, B/binary>>;
-          false -> A
-        end
-    end,
-    <<>>,
-    List
-   ).
 
+%% @doc Returns the argument itself.
+%%
+%% This is useful for composition and as a generic helper.
 -spec id(A) -> A.
 id(X) ->
   X.
 
-to_hex(Bin) when is_binary(Bin) ->
-  list_to_binary(
-    lists:flatten(
-      [io_lib:format("~2.16.0b", [B]) || <<B>> <= Bin])).
-
+%% @doc Thread a value through a set of unary functions.
+%%
+%% The first function receives the provided argument as its input, with
+%% its output being passed to the next function, and so on. When the
+%% provided list of functions is empty, this amounts to `id'.
+%%
+%% ```
+%%    Funs = [fun string:titlecase/1, fun string:reverse/1],
+%%    Res = tql:pipe("this is an example", Funs),
+%%    Res = "elpmaxe na si sihT".
+%% '''
+-spec pipe(Arg, Funs) -> Res when
+    Arg :: term(),
+    Funs :: [Fun],
+    Fun :: fun ((A :: term()) -> B :: term()),
+    Res :: term().
 pipe(Arg, Fs) ->
   (tql_fun:compose(lists:reverse(Fs)))(Arg).
 

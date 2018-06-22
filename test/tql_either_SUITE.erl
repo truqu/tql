@@ -8,7 +8,6 @@
         , test_fold1/1
         , test_fold2/1
         , test_fold3/1
-        , test_fold4/1
         , test_sequence1/1
         , test_sequence2/1
         , test_sequence3/1
@@ -18,7 +17,6 @@ all() ->
   [ test_fold1
   , test_fold2
   , test_fold3
-  , test_fold4
   , test_sequence1
   , test_sequence2
   , test_sequence3
@@ -29,14 +27,6 @@ all() ->
 %%%---------------------------------------------------------------------
 
 test_fold1(_Config) ->
-  Result = tql_either:fold([ fun initiate_map/0
-                           , fun(X) -> add_foo(X, 1) end
-                           , fun increment_foo/1
-                           , fun maps:to_list/1
-                           ]),
-  {ok, [{foo, 2}]} = Result.
-
-test_fold2(_Config) ->
   Result = tql_either:fold( #{}
                           , [ fun(X) -> add_foo(X, 1) end
                             , fun increment_foo/1
@@ -45,7 +35,7 @@ test_fold2(_Config) ->
   {ok, [{foo, 2}]} = Result.
 
 
-test_fold3(_Config) ->
+test_fold2(_Config) ->
   Result = tql_either:fold( #{foo => 2}
                           , [ fun(X) -> add_foo(X, 1) end
                             , fun increment_foo/1
@@ -53,7 +43,7 @@ test_fold3(_Config) ->
                             ]),
   {error, foo_already_set} = Result.
 
-test_fold4(_Config) ->
+test_fold3(_Config) ->
   Result = tql_either:fold( #{}
                           , [ fun(X) -> add_foo(X, "BAR") end
                             , fun increment_foo/1
@@ -64,9 +54,9 @@ test_fold4(_Config) ->
 
 test_sequence1(_Config) ->
   Result = tql_either:sequence([ {ok, true}
-                              , {ok, 1}
-                              , {ok, "foobar"}
-                              ]),
+                               , {ok, 1}
+                               , {ok, "foobar"}
+                               ]),
   {ok, [true, 1, "foobar"]} = Result.
 
 test_sequence2(_Config) ->
@@ -89,9 +79,6 @@ test_sequence3(_Config) ->
 %%% Internal functions
 %%%-----------------------------------------------------------------------------
 
-
-initiate_map() ->
-  #{}.
 
 add_foo(#{ foo := _ }, _Value) ->
   {error, foo_already_set};
