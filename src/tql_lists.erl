@@ -15,13 +15,13 @@
 %%% API
 %%%---------------------------------------------------------------------
 
-%% @doc Conjuncion of a list of booleans. Returns `true' iff all the
-%% booleans are `true'.
+%% @doc Conjunction of a list of booleans. Returns `true' if and only if
+%% all the booleans are `true'.
 -spec all([boolean()]) -> boolean().
 all(Xs) ->
   lists:all(fun tql:id/1, Xs).
 
-%% @doc Disunjection of a list of booleans. Returns `true' if at least
+%% @doc Disjunction of a list of booleans. Returns `true' if at least
 %% one of the booleans is `true'.
 -spec any([boolean()]) -> boolean().
 any(Xs) ->
