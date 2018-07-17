@@ -11,6 +11,7 @@
         , test_sequence1/1
         , test_sequence2/1
         , test_sequence3/1
+        , test_from_bool/1
         ]).
 
 all() ->
@@ -20,6 +21,7 @@ all() ->
   , test_sequence1
   , test_sequence2
   , test_sequence3
+  , test_from_bool
   ].
 
 %%%---------------------------------------------------------------------
@@ -74,6 +76,11 @@ test_sequence3(_Config) ->
                                ]),
   {error, not_found} = Result.
 
+test_from_bool(_Config) ->
+  Result1 = tql_either:from_bool(authorized, unauthorized, true),
+  Result2 = tql_either:from_bool(authorized, unauthorized, false),
+  {ok, authorized} = Result1,
+  {error, unauthorized} = Result2.
 
 %%%-----------------------------------------------------------------------------
 %%% Internal functions
@@ -89,7 +96,6 @@ increment_foo(#{ foo := Foo } = Map) when is_integer(Foo) ->
   {ok, maps:update(foo, Foo + 1, Map)};
 increment_foo(_Map) ->
   {error, foo_not_integer}.
-
 
 %% Local variables:
 %% mode: erlang

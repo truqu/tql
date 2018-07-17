@@ -5,6 +5,7 @@
         , sequence/1
         , is_ok/1
         , is_error/1
+        , from_bool/3
         ]).
 
 -type either(Term, Error) :: {ok, Term} | {error, Error}.
@@ -56,24 +57,37 @@ sequence(Eithers) ->
   end, {ok, []}, Eithers).
 
 %% @doc Check whether the given result tuple is of the form `{ok, V}'.
--spec is_ok(either(T :: term(), E :: term())) -> boolean().
+-spec is_ok(either(Term, Error)) -> boolean() when
+    Term  :: term(),
+    Error :: term().
 is_ok({ok, _}) ->
   true;
 is_ok({error, _}) ->
   false.
 
 %% @doc Check whether the given result tuple is of the form `{error, E}'.
--spec is_error(either(T :: term(), E :: term())) -> boolean().
+-spec is_error(either(Term, Error)) -> boolean() when
+    Term  :: term(),
+    Error :: term().
 is_error({ok, _}) ->
   false;
 is_error({error, _}) ->
   true.
 
+%% @doc Convert a boolean to the form `{ok, Term}` or `{error, Error}`.
+-spec from_bool(Term, Error, boolean()) -> either(Term, Error) when
+    Term  :: term(),
+    Error :: term().
+from_bool(Term, _Error, true) ->
+  {ok, Term};
+from_bool(_Term, Error, false) ->
+  {error, Error}.
+
 %%%-----------------------------------------------------------------------------
 %%% Internal functions
 %%%-----------------------------------------------------------------------------
 
--spec fold_handle(fun((Term) -> Return), Return) -> Return when 
+-spec fold_handle(fun((Term) -> Return), Return) -> Return when
     Term   :: term(),
     Error  :: term(),
     Return :: either(Term, Error) | Term.
