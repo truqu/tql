@@ -57,14 +57,18 @@ sequence(Eithers) ->
   end, {ok, []}, Eithers).
 
 %% @doc Check whether the given result tuple is of the form `{ok, V}'.
--spec is_ok(either(T :: term(), E :: term())) -> boolean().
+-spec is_ok(either(Term, Error)) -> boolean() when
+    Term  :: term(),
+    Error :: term().
 is_ok({ok, _}) ->
   true;
 is_ok({error, _}) ->
   false.
 
 %% @doc Check whether the given result tuple is of the form `{error, E}'.
--spec is_error(either(T :: term(), E :: term())) -> boolean().
+-spec is_error(either(Term, Error)) -> boolean() when
+    Term  :: term(),
+    Error :: term().
 is_error({ok, _}) ->
   false;
 is_error({error, _}) ->

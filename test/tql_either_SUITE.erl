@@ -82,8 +82,6 @@ test_from_bool(_Config) ->
   {ok, authorized} = Result1,
   {error, unauthorized} = Result2.
 
-
-
 %%%-----------------------------------------------------------------------------
 %%% Internal functions
 %%%-----------------------------------------------------------------------------
@@ -98,7 +96,6 @@ increment_foo(#{ foo := Foo } = Map) when is_integer(Foo) ->
   {ok, maps:update(foo, Foo + 1, Map)};
 increment_foo(_Map) ->
   {error, foo_not_integer}.
-
 
 %% Local variables:
 %% mode: erlang
