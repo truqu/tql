@@ -5,6 +5,7 @@
         , sequence/1
         , is_ok/1
         , is_error/1
+        , from_bool/3
         ]).
 
 -type either(Term, Error) :: {ok, Term} | {error, Error}.
@@ -69,11 +70,19 @@ is_error({ok, _}) ->
 is_error({error, _}) ->
   true.
 
+-spec from_bool(Term, Error, boolean()) -> either(Term, Error) when
+    Term  :: term(),
+    Error :: term().
+from_bool(Term, _Error, true) ->
+  {ok, Term};
+from_bool(_Term, Error, false) ->
+  {error, Error}.
+
 %%%-----------------------------------------------------------------------------
 %%% Internal functions
 %%%-----------------------------------------------------------------------------
 
--spec fold_handle(fun((Term) -> Return), Return) -> Return when 
+-spec fold_handle(fun((Term) -> Return), Return) -> Return when
     Term   :: term(),
     Error  :: term(),
     Return :: either(Term, Error) | Term.
