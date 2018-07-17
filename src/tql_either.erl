@@ -70,6 +70,7 @@ is_error({ok, _}) ->
 is_error({error, _}) ->
   true.
 
+%% @doc Convert a boolean to the form `{ok, Term}` or `{error, Error}`.
 -spec from_bool(Term, Error, boolean()) -> either(Term, Error) when
     Term  :: term(),
     Error :: term().
