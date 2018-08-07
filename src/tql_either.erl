@@ -6,6 +6,7 @@
         , is_ok/1
         , is_error/1
         , from_bool/3
+        , oks/1
         ]).
 
 -type either(Result, Reason) :: {ok, Result} | {error, Reason}.
@@ -77,10 +78,21 @@ is_error({error, _}) ->
 -spec from_bool(Result, Reason, boolean()) -> either(Result, Reason) when
     Result :: term(),
     Reason :: term().
-from_bool(Result, _Reason, true) ->
+from_bool(Result, _, true) ->
   {ok, Result};
-from_bool(_Result, Reason, false) ->
+from_bool(_, Reason, false) ->
   {error, Reason}.
+
+-spec oks(either(Result, Reason)) -> [Result] when
+    Result :: term(),
+    Reason :: term().
+oks(Eithers) ->
+  lists:filtermap( fun({ok, Result}) ->
+                       {true, Result};
+                      ({error, _}) ->
+                       false
+                   end
+                 , Eithers).
 
 %%%-----------------------------------------------------------------------------
 %%% Internal functions
