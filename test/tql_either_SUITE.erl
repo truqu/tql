@@ -12,6 +12,7 @@
         , test_sequence2/1
         , test_sequence3/1
         , test_from_bool/1
+        , test_oks/1
         ]).
 
 all() ->
@@ -22,6 +23,7 @@ all() ->
   , test_sequence2
   , test_sequence3
   , test_from_bool
+  , test_oks
   ].
 
 %%%---------------------------------------------------------------------
@@ -81,6 +83,17 @@ test_from_bool(_Config) ->
   Result2 = tql_either:from_bool(authorized, unauthorized, false),
   {ok, authorized} = Result1,
   {error, unauthorized} = Result2.
+
+test_oks(_Config) ->
+  Result1 = tql_either:oks([{ok, 1}, {error, 2}, {ok, 3}]),
+  Result2 = tql_either:oks([{ok, 1}, {ok, 2}, {ok, 3}]),
+  Result3 = tql_either:oks([{ok, 1}, {error, 2}, {error, 3}]),
+  Result4 = tql_either:oks([{error, 1}, {error, 2}, {error, 3}]),
+  [1, 3] = Result1,
+  [1, 2, 3] = Result2,
+  [1] = Result3,
+  [] = Result4.
+
 
 %%%-----------------------------------------------------------------------------
 %%% Internal functions
