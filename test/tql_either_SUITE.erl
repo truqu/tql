@@ -89,9 +89,9 @@ test_oks(_Config) ->
   Result2 = tql_either:oks([{ok, 1}, {ok, 2}, {ok, 3}]),
   Result3 = tql_either:oks([{ok, 1}, {error, 2}, {error, 3}]),
   Result4 = tql_either:oks([{error, 1}, {error, 2}, {error, 3}]),
-  [{ok, 1}, {ok, 3}] = Result1,
-  [{ok, 1}, {ok, 2}, {ok, 3}] = Result2,
-  [{ok, 1}] = Result3,
+  [1, 3] = Result1,
+  [1, 2, 3] = Result2,
+  [1] = Result3,
   [] = Result4.
 
 
