@@ -83,7 +83,7 @@ from_bool(Result, _, true) ->
 from_bool(_, Reason, false) ->
   {error, Reason}.
 
--spec oks(either(Result, Reason)) -> [Result] when
+-spec oks([either(Result, Reason)]) -> [Result] when
     Result :: term(),
     Reason :: term().
 oks(Eithers) ->
