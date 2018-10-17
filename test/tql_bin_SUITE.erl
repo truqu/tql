@@ -6,11 +6,14 @@
 -export([ all/0
           %% Tests
         , to_hex/1
-        ]
-       ).
+        , trim/1
+        , reverse/1
+        ]).
 
 all() ->
   [ to_hex
+  , trim
+  , reverse
   ].
 
 %%%---------------------------------------------------------------------
@@ -20,6 +23,18 @@ all() ->
 to_hex(_Config) ->
   <<"beef">> = tql_bin:to_hex(<<190, 239>>),
   <<"c0ffee">> = tql_bin:to_hex(<<192, 255, 238>>),
+  ok.
+
+trim(_Config) ->
+  Binary = <<"   testing   ">>,
+  <<"testing">>    = tql_bin:trim(Binary),
+  <<"testing   ">> = tql_bin:trim_left(Binary),
+  <<"   testing">> = tql_bin:trim_right(Binary),
+  ok.
+
+reverse(_Config) ->
+  Binary = <<"testing">>,
+  <<"gnitset">>    = tql_bin:reverse(Binary),
   ok.
 
 %% Local variables:
