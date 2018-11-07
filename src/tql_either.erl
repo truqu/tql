@@ -6,6 +6,7 @@
         , is_ok/1
         , is_error/1
         , from_bool/3
+        , with_default/2
         , oks/1
         ]).
 
@@ -83,6 +84,16 @@ from_bool(Result, _, true) ->
 from_bool(_, Reason, false) ->
   {error, Reason}.
 
+-spec with_default(either(Result, Reason), Default) -> Result | Default when
+    Result  :: term(),
+    Reason  :: term(),
+    Default :: term().
+with_default({ok, Value}, _) ->
+  Value;
+with_default({error, _}, Default) ->
+  Default.
+
+%% @doc Collect the `ok' values from a list of result tuples.
 -spec oks([either(Result, Reason)]) -> [Result] when
     Result :: term(),
     Reason :: term().
