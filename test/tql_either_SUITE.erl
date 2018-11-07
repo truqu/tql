@@ -12,6 +12,7 @@
         , test_sequence2/1
         , test_sequence3/1
         , test_from_bool/1
+        , test_with_default/1
         , test_oks/1
         ]).
 
@@ -23,6 +24,7 @@ all() ->
   , test_sequence2
   , test_sequence3
   , test_from_bool
+  , test_with_default
   , test_oks
   ].
 
@@ -83,6 +85,11 @@ test_from_bool(_Config) ->
   Result2 = tql_either:from_bool(authorized, unauthorized, false),
   {ok, authorized} = Result1,
   {error, unauthorized} = Result2.
+
+test_with_default(_Config) ->
+  Result1 = tql_either:with_default({ok, <<"good">>}, <<"bad">>),
+  Result2 = tql_either:with_default({error, <<"bad">>}, <<"good">>),
+  Result1 = Result2 = <<"good">>.
 
 test_oks(_Config) ->
   Result1 = tql_either:oks([{ok, 1}, {error, 2}, {ok, 3}]),
