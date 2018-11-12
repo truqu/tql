@@ -1,4 +1,6 @@
 sudo: false
 language: erlang
-otp_release: 20.2
+otp_release:
+  - 20.2
+  - 21.1
 script: rebar3 do ct, dialyzer, edoc
