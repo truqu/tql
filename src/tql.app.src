@@ -1,6 +1,6 @@
 { application, tql
 , [ {description, "TruQu library"}
-  , {vsn, "1.4.0"}
+  , {vsn, "1.5.0"}
   , {modules, []}
   , {registered, []}
   , {applications, [ kernel
