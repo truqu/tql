@@ -12,6 +12,7 @@
         , test_sequence2/1
         , test_sequence3/1
         , test_from_bool/1
+        , test_and/1
         , test_with_default/1
         , test_oks/1
         ]).
@@ -24,6 +25,7 @@ all() ->
   , test_sequence2
   , test_sequence3
   , test_from_bool
+  , test_and
   , test_with_default
   , test_oks
   ].
@@ -85,6 +87,16 @@ test_from_bool(_Config) ->
   Result2 = tql_either:from_bool(authorized, unauthorized, false),
   {ok, authorized} = Result1,
   {error, unauthorized} = Result2.
+
+test_and(_Config) ->
+  Result = tql_either:fold( #{}
+                           , [ fun(X) -> add_foo(X,1) end
+                             , fun increment_foo/1
+                             , tql_either:and_(fun(Map) -> increment_foo(Map) end)
+                             , fun maps:to_list/1
+                             ]
+                          ),
+  {ok, [{foo, 3}]} = Result.
 
 test_with_default(_Config) ->
   Result1 = tql_either:with_default({ok, <<"good">>}, <<"bad">>),
