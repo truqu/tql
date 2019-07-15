@@ -89,14 +89,8 @@ test_from_bool(_Config) ->
   {error, unauthorized} = Result2.
 
 test_and(_Config) ->
-  Result = tql_either:fold( #{}
-                           , [ fun(X) -> add_foo(X,1) end
-                             , fun increment_foo/1
-                             , tql_either:and_(fun(Map) -> increment_foo(Map) end)
-                             , fun maps:to_list/1
-                             ]
-                          ),
-  {ok, [{foo, 3}]} = Result.
+  {ok, {a, b}} = (tql_either:and_(fun (a) -> {ok, b} end))(a),
+  {error, foo} = (tql_either:and_(fun (_) -> {error, foo} end))(a).
 
 test_with_default(_Config) ->
   Result1 = tql_either:with_default({ok, <<"good">>}, <<"bad">>),
