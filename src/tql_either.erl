@@ -7,6 +7,7 @@
         , is_error/1
         , from_bool/3
         , with_default/2
+        , and_/1
         , oks/1
         ]).
 
@@ -83,6 +84,18 @@ from_bool(Result, _, true) ->
   {ok, Result};
 from_bool(_, Reason, false) ->
   {error, Reason}.
+
+%% @doc Fold over a term that depend on a previous result
+-spec and_(fun((X) -> either(Y, Err))) -> fun((X) -> either({X, Y}, Err)).
+and_(F) ->
+  fun (X) ->
+      case F(X) of
+        {ok, Y} ->
+          {ok, {X,Y}};
+        {error, E} ->
+          {error, E}
+      end
+  end.
 
 -spec with_default(either(Result, Reason), Default) -> Result | Default when
     Result  :: term(),
