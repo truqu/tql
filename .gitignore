@@ -4,3 +4,4 @@ ebin
 log/
 rebar.lock
 doc/
+logs/
