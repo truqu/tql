@@ -14,8 +14,7 @@
 
 -type either(Result, Reason) :: {ok, Result} | {error, Reason}.
 
--export_types([ either/2
-              ]).
+-export_type([either/2]).
 
 %%%-----------------------------------------------------------------------------
 %%% API
