@@ -105,7 +105,9 @@ and_(F) ->
         {ok, Y} ->
           {ok, {X,Y}};
         {error, E} ->
-          {error, E}
+          {error, E};
+        Y ->
+          {ok, {X, Y}}
       end
   end.
 

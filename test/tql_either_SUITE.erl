@@ -101,8 +101,10 @@ test_from_bool(_Config) ->
   {error, unauthorized} = Result2.
 
 test_and(_Config) ->
-  {ok, {a, b}} = (tql_either:and_(fun (a) -> {ok, b} end))(a),
-  {error, foo} = (tql_either:and_(fun (_) -> {error, foo} end))(a).
+  {ok, {a, b}} = (tql_either:and_(fun (_) -> {ok, b} end))(a),
+  {error, foo} = (tql_either:and_(fun (_) -> {error, foo} end))(a),
+  {ok, {a, b}} = (tql_either:and_(fun (_) -> b end))(a).
+
 
 test_with_default(_Config) ->
   Result1 = tql_either:with_default({ok, <<"good">>}, <<"bad">>),
