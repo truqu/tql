@@ -4,6 +4,7 @@
 -export([ fold/2
         , sequence/1
         , traverse/2
+        , map/2
         , is_ok/1
         , is_error/1
         , from_bool/3
@@ -69,6 +70,11 @@ sequence(Eithers) ->
     Reason :: term().
 traverse(F, Xs) ->
   traverse_help(F, Xs, []).
+
+%% @doc Map a function over an either
+-spec map(F :: fun ((A) -> B), either(A, Reason)) -> either(B, Reason).
+map(F, {ok, V}) -> {ok, F(V)};
+map(_, {error, _} = R) -> R.
 
 %% @doc Check whether the given result tuple is of the form `{ok, Result}'.
 -spec is_ok(either(Result, Reason)) -> boolean() when
