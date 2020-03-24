@@ -9,6 +9,7 @@
         , shuffle/1
         , take/2
         , uniq/1
+        , groups_of/2
         ]).
 
 %%%---------------------------------------------------------------------
@@ -63,6 +64,16 @@ take(N, [X | Xs]) ->
 -spec uniq([A]) -> [A].
 uniq(L) ->
   sets:to_list(sets:from_list(L)).
+
+%% @doc Splits a list of items into sublists of size equal to N
+-spec groups_of(pos_integer(), [Data]) -> [[Data]].
+groups_of(N, Xs) -> groups_of(N, Xs, []).
+
+groups_of(_, [], Acc) -> lists:reverse(Acc);
+groups_of(N, Data, Acc) when length(Data) =< N -> lists:reverse([Data | Acc]);
+groups_of(N, Data, Acc) ->
+  {Group, Rest} = lists:split(N, Data),
+  groups_of(N, Rest, [Group | Acc]).
 
 %% Local variables:
 %% mode: erlang
