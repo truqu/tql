@@ -8,6 +8,7 @@
         , all_/1
         , any/1
         , uniq/1
+        , groups_of/1
         ]
        ).
 
@@ -15,6 +16,7 @@ all() ->
   [ all_
   , any
   , uniq
+  , groups_of
   ].
 
 %%%---------------------------------------------------------------------
@@ -45,10 +47,10 @@ any(_Config) ->
 
 uniq(_Config) ->
   true = proper:quickcheck(
-          ?FORALL( L
-                 , list(term())
-                 , length(tql_lists:uniq(L)) == sets:size(sets:from_list(L))
-                 )
+           ?FORALL( L
+                  , list(term())
+                  , length(tql_lists:uniq(L)) == sets:size(sets:from_list(L))
+                  )
           ),
   true = proper:quickcheck(
            ?FORALL( L
@@ -59,6 +61,32 @@ uniq(_Config) ->
                   )
           ),
   ok.
+
+groups_of(_Config) ->
+  true = proper:quickcheck(
+           ?FORALL( {List, Size}
+                  , {list(any()), pos_integer()}
+                  , proper:conjunction(
+                      [ {append_is_original, check_append_is_original(List, Size)}
+                      , {groups_are_sized, check_groups_are_sized(List, Size)}
+                      ])
+                  )
+          ),
+  ok.
+
+%%%-----------------------------------------------------------------------------
+%%% Internal functions
+%%%-----------------------------------------------------------------------------
+
+check_append_is_original(List, Size) ->
+  List == lists:append(tql_lists:groups_of(Size, List)).
+
+check_groups_are_sized(List, Size) ->
+  check_group_sizes(tql_lists:groups_of(Size, List), Size).
+
+check_group_sizes([], _) -> true;
+check_group_sizes([Xs], Size) -> Xs /= [] andalso length(Xs) =< Size;
+check_group_sizes([Xs | Rest], Size) -> length(Xs) == Size andalso check_group_sizes(Rest, Size).
 
 %% Local variables:
 %% mode: erlang
